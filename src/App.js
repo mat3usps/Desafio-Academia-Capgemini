@@ -1,25 +1,49 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter } from "react-router-dom";
+import { Container } from "@material-ui/core";
+import {
+  makeStyles,
+  ThemeProvider,
+  createMuiTheme,
+} from "@material-ui/core/styles";
 
-function App() {
+import StyledAppBar from "./components/StyledAppBar";
+import Routes from "./routes/Routes";
+import Background from "./assets/images/background.jpg";
+
+const useStyles = makeStyles((theme) => ({
+  container: {
+    padding: theme.spacing(4, 2, 4),
+    maxWidth: "800px",
+    height: "500px",
+    backgroundImage: `url(${Background})`,
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "center center",
+    backgroundSize: "800px",
+    backgroundAttachment: "fixed",
+    display: "flex",
+    justifyContent: "center",
+  },
+}));
+
+const theme = createMuiTheme({
+  typography: {
+    fontFamily: "Caveat",
+  },
+});
+
+const App = () => {
+  const classes = useStyles();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <ThemeProvider theme={theme}>
+        <StyledAppBar />
+        <Container className={classes.container}>
+          <Routes />
+        </Container>
+      </ThemeProvider>
+    </BrowserRouter>
   );
-}
+};
 
 export default App;
