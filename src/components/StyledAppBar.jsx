@@ -52,7 +52,7 @@ const StyledAppBar = () => {
             </ButtonBase>
 
             <Button variant="outlined" onClick={openModal}>
-              Cadastrar Novo Anúncio
+              Cadastrar Novo
             </Button>
           </Box>
         </Toolbar>

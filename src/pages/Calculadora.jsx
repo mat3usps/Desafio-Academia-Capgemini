@@ -9,8 +9,8 @@ const Calculadora = () => {
   return (
     <div>
       <Box
-        maxWidth="550px"
-        marginTop="20px"
+        maxWidth="500px"
+        marginTop="40px"
         display="flex"
         flexDirection="column"
       >
@@ -18,10 +18,10 @@ const Calculadora = () => {
           Calculadora de Alcance
         </Typography>
         <Typography variant="h6" align="center" gutterbottom>
-          A calculadora de alcance faz uma expeculação média da quantidade de
-          visualização que um anúncio pode ter baseado no valor investido
-          inicialmente e dados padronizados de acordo com nossas próprias
-          análises.
+          A calculadora de alcance da Divulga Tudo faz uma expeculação média da
+          quantidade de visualização que um anúncio pode ter baseado no valor
+          investido inicialmente. Ela faz uso de dados retirados de nossas
+          próprias análises sobre projeção de anúncios nas redes sociais.
         </Typography>
 
         <Box m={2} display="flex" flexDirection justifyContent="space-evenly">
@@ -40,7 +40,9 @@ const Calculadora = () => {
             }}
           />
           <TextField
-            value={calculadoraDeAlcanceDeAnuncio(investimento).toFixed(0)}
+            value={calculadoraDeAlcanceDeAnuncio(
+              investimento
+            ).visualizacaoTotal.toFixed(0)}
             label="Visualizações"
             variant="outlined"
             margin="dense"
