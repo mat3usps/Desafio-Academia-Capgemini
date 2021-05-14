@@ -20,51 +20,66 @@ const AnuncioForm = () => {
     investimentoAoDia: "",
   });
 
+  const [mensagemDeErro, setMensagemDeErro] = useState("");
+
   const handleChange = (prop) => (event) => {
     setAnuncio({ ...anuncio, [prop]: event.target.value });
   };
 
   const cadastrouAnuncio = async () => {
-    const data1 = new Date(anuncio.inicio);
-    const data2 = new Date(anuncio.fim);
-    const diferenca = data2.getTime() - data1.getTime();
-    const diferencaEmDias = diferenca / (1000 * 3600 * 24);
-    const investimentoTotal =
-      Number(anuncio.investimentoAoDia) * diferencaEmDias;
-    const resultados = calculadoraDeAlcanceDeAnuncio(investimentoTotal);
+    if (
+      anuncio.nome !== "" &&
+      anuncio.cliente !== "" &&
+      anuncio.inicio !== "" &&
+      anuncio.fim !== "" &&
+      anuncio.investimentoAoDia !== ""
+    ) {
+      const data1 = new Date(anuncio.inicio);
+      const data2 = new Date(anuncio.fim);
+      const diferenca = data2.getTime() - data1.getTime();
+      const diferencaEmDias = diferenca / (1000 * 3600 * 24);
+      const investimentoTotal =
+        Number(anuncio.investimentoAoDia) * diferencaEmDias;
+      const resultados = calculadoraDeAlcanceDeAnuncio(investimentoTotal);
 
-    setAnuncio({
-      nome: "",
-      cliente: "",
-      inicio: "",
-      fim: "",
-      investimentoAoDia: "",
-    });
-
-    await firebase
-      .firestore()
-      .collection("anunciosCadastrados")
-      .add({
-        nome: anuncio.nome,
-        cliente: anuncio.cliente,
-        inicio: anuncio.inicio,
-        fim: anuncio.fim,
-        investimentoAoDia: anuncio.investimentoAoDia,
-        investimentoTotal: investimentoTotal,
-        maximoDeVisualizacoes: resultados.visualizacaoTotal.toFixed(0),
-        maximoDeCliques: resultados.cliqueTotal.toFixed(0),
-        maximoDeCompartilhamentos: resultados.compartilhamentoTotal.toFixed(0),
-      })
-      .then(() => {
-        console.log("Anúncio Cadastrado.");
-      })
-      .catch((error) => {
-        console.log("Anúncio não cadastrado.", error);
+      setAnuncio({
+        nome: "",
+        cliente: "",
+        inicio: "",
+        fim: "",
+        investimentoAoDia: "",
       });
+
+      await firebase
+        .firestore()
+        .collection("anunciosCadastrados")
+        .add({
+          nome: anuncio.nome,
+          cliente: anuncio.cliente,
+          inicio: anuncio.inicio,
+          fim: anuncio.fim,
+          investimentoAoDia: anuncio.investimentoAoDia,
+          investimentoTotal: investimentoTotal,
+          maximoDeVisualizacoes: resultados.visualizacaoTotal.toFixed(0),
+          maximoDeCliques: resultados.cliqueTotal.toFixed(0),
+          maximoDeCompartilhamentos:
+            resultados.compartilhamentoTotal.toFixed(0),
+        })
+        .then(() => {
+          console.log("Anúncio Cadastrado.");
+        })
+        .catch((error) => {
+          console.log("Anúncio não cadastrado.", error);
+        });
+    } else {
+      setMensagemDeErro(
+        "Antes de cadastrar um anúncio, preencha todos os campos."
+      );
+    }
   };
 
   return (
-    <form style={{ width: "300px", height: "310px", padding: "15px" }}>
+    <form style={{ width: "300px", height: "370px", padding: "15px" }}>
       <Typography variant="h3" align="center">
         Novo Anúncio
       </Typography>
@@ -131,6 +146,10 @@ const AnuncioForm = () => {
           Cadastrar
         </Button>
       </Box>
+
+      <Typography variant="h6" align="center">
+        {mensagemDeErro}
+      </Typography>
     </form>
   );
 };
