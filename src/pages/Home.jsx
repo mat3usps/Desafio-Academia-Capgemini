@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const Home = () => {
   return (
     <div>
-      <Box maxWidth="500px" marginTop="50px">
+      <Box maxWidth="500px" marginTop="40px">
         <Typography variant="h2" gutterbottom>
           {" "}
           Sobre{" "}

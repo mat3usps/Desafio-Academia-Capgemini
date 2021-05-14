@@ -21,7 +21,9 @@ const Cadastrados = () => {
         let anuncios = [];
 
         doc.forEach((anuncio) => {
+          console.log(anuncio);
           anuncios.push({
+            id: anuncio.id,
             nome: anuncio.data().nome,
             cliente: anuncio.data().cliente,
             inicio: anuncio.data().inicio,

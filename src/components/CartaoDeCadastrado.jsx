@@ -1,9 +1,12 @@
 import { Typography, Box, GridListTile, Button } from "@material-ui/core";
 import { useState } from "react";
 
+import firebase from "../services/FirebaseService";
+
 const CartaoDeCadastrado = ({ anuncio }) => {
   const [verso, setVerso] = useState(false);
   const {
+    id,
     nome,
     cliente,
     inicio,
@@ -21,6 +24,20 @@ const CartaoDeCadastrado = ({ anuncio }) => {
     } else {
       setVerso(true);
     }
+  };
+
+  const apagarAnuncio = async () => {
+    await firebase
+      .firestore()
+      .collection(`anunciosCadastrados`)
+      .doc(id)
+      .delete()
+      .then(() => {
+        console.log("Anúncio excluido com sucesso.");
+      })
+      .catch((error) => {
+        console.log("Erro ao tentar apagar anúncio.", error);
+      });
   };
 
   return (
@@ -71,9 +88,12 @@ const CartaoDeCadastrado = ({ anuncio }) => {
             </Typography>
           </Box>
         )}
-        <Box m={1} fullWidth display="flex" justifyContent="center">
+        <Box m={1} fullWidth display="flex" justifyContent="space-evenly">
           <Button variant="outlined" onClick={virarLado}>
             {verso ? "Principal" : "Relatórios"}
+          </Button>
+          <Button variant="outlined" onClick={apagarAnuncio}>
+            Apagar
           </Button>
         </Box>
       </Box>

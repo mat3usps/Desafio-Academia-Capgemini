@@ -13,12 +13,12 @@ import Background from "./assets/images/background.jpg";
 const useStyles = makeStyles((theme) => ({
   container: {
     padding: theme.spacing(4, 2, 4),
-    maxWidth: "800px",
+    maxWidth: "900px",
     height: "500px",
     backgroundImage: `url(${Background})`,
     backgroundRepeat: "no-repeat",
     backgroundPosition: "center center",
-    backgroundSize: "800px",
+    backgroundSize: "900px",
     backgroundAttachment: "fixed",
     display: "flex",
     justifyContent: "center",
