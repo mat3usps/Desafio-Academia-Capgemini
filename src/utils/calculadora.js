@@ -1,4 +1,5 @@
-export const calculadoraDeAlcanceDeAnuncio = (reais) => {
+export const calculadoraDeAlcanceDeAnuncio = (raw) => {
+  const reais = Number(raw);
   const visualizacoesPorRealInvestido = 30;
   const visualizacaoInicial = reais * visualizacoesPorRealInvestido;
 

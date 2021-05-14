@@ -41,7 +41,7 @@ const CartaoDeCadastrado = ({ anuncio }) => {
               {cliente}
             </Typography>
             <Typography variant="h6" align="center" gutterbottom>
-              Referência: {nome}
+              Nome: {nome}
             </Typography>
             <Typography variant="h6" align="center" gutterbottom>
               Período: {`${inicio} a ${fim}`}

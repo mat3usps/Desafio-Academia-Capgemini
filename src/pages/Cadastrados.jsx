@@ -1,13 +1,5 @@
-import {
-  Typography,
-  Box,
-  GridList,
-  TextField,
-  Button,
-} from "@material-ui/core";
+import { Typography, Box, GridList, TextField } from "@material-ui/core";
 import { useEffect, useState } from "react";
-import SearchIcon from "@material-ui/icons/Search";
-import CloseIcon from "@material-ui/icons/Close";
 
 import firebase from "../services/FirebaseService";
 import CartaoDeCadastrado from "../components/CartaoDeCadastrado";
@@ -15,10 +7,10 @@ import CartaoDeCadastrado from "../components/CartaoDeCadastrado";
 const Cadastrados = () => {
   const [anunciosCadastrados, setAnunciosCadastrados] = useState([]);
   const [filtroPorCliente, setFiltroPorCliente] = useState("");
+  const [filtroPorData, setFiltroPorData] = useState({ inicio: "", fim: "" });
 
   useEffect(() => {
     atualizarCadastros();
-    console.log("cadastrados", anunciosCadastrados);
   }, []);
 
   const atualizarCadastros = async () => {
@@ -45,19 +37,25 @@ const Cadastrados = () => {
       });
   };
 
-  let filtrados = null;
-  console.log("filtrados", filtrados);
-
-  const filtrandoClientes = (string) => {
-    if (filtrados) {
-      filtrados = null;
-      atualizarCadastros();
-    } else {
-      filtrados = anunciosCadastrados.filter((anuncio) => {
+  const filtrando = (string, inicio, fim) => {
+    if (string !== "") {
+      const filtrados = anunciosCadastrados.filter((anuncio) => {
         const cliente = anuncio.cliente.toLowerCase();
         const termo = string.toLowerCase();
         return cliente.indexOf(termo) >= 0;
       });
+
+      return filtrados;
+    } else if (inicio !== "" && fim !== "") {
+      const periodoInicio = new Date(inicio);
+      const periodoFim = new Date(fim);
+      const filtrados = anunciosCadastrados.filter((anuncio) => {
+        const anuncioInicio = new Date(anuncio.inicio);
+        const anuncioFim = new Date(anuncio.fim);
+        return periodoInicio >= anuncioInicio && periodoFim <= anuncioFim;
+      });
+
+      return filtrados;
     }
   };
 
@@ -68,15 +66,12 @@ const Cadastrados = () => {
       </Typography>
 
       <Box display="flex" alignItems="center" justifyContent="space-evenly">
-        <Box>
-          <Box display="flex" justifyContent="space-evenly">
-            <Button
-              variant="outlined"
-              onClick={filtrandoClientes(filtroPorCliente)}
-            >
-              {filtrados ? <CloseIcon /> : <SearchIcon />}
-            </Button>
-            <Typography variant="h6"> por Cliente </Typography>
+        <Box width="165px" display="flex" flexDirection="column" align="center">
+          <Box height="25px">
+            <Typography variant="h6" align="center">
+              {" "}
+              Filtrar por Cliente{" "}
+            </Typography>
           </Box>
           <TextField
             value={filtroPorCliente}
@@ -88,8 +83,17 @@ const Cadastrados = () => {
             fullWidth
           />
 
-          <Typography variant="h6"> por Período </Typography>
+          <Box height="25px">
+            <Typography variant="h6" align="center">
+              {" "}
+              Filtrar por Período{" "}
+            </Typography>
+          </Box>
           <TextField
+            value={filtroPorData.inicio}
+            onChange={(event) =>
+              setFiltroPorData({ ...filtroPorData, inicio: event.target.value })
+            }
             label="Início"
             type="date"
             margin="dense"
@@ -98,6 +102,10 @@ const Cadastrados = () => {
             }}
           />
           <TextField
+            value={filtroPorData.fim}
+            onChange={(event) =>
+              setFiltroPorData({ ...filtroPorData, fim: event.target.value })
+            }
             label="Fim"
             type="date"
             margin="dense"
@@ -115,8 +123,13 @@ const Cadastrados = () => {
           width="325px"
         >
           <GridList>
-            {filtrados
-              ? filtrados.map((anuncio) => (
+            {filtroPorCliente !== "" ||
+            (filtroPorData.inicio !== "" && filtroPorData.fim !== "")
+              ? filtrando(
+                  filtroPorCliente,
+                  filtroPorData.inicio,
+                  filtroPorData.fim
+                ).map((anuncio) => (
                   <CartaoDeCadastrado anuncio={anuncio} key={anuncio.nome} />
                 ))
               : anunciosCadastrados.map((anuncio) => (

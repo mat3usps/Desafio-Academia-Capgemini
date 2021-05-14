@@ -28,6 +28,7 @@ const Calculadora = () => {
           <TextField
             value={investimento}
             onChange={(event) => setInvestimento(event.target.value)}
+            type="number"
             label="Investimento"
             variant="outlined"
             margin="dense"
